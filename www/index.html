@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>WikiMovies: Search Your Movies</title>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript" src="cordova.js"></script>
+        <div data-role="page">
+            <div data-role="header">
+                <h3>WikiMovies</h3>
+            </div>
+            <div data-role="main" class="ui-content">
+                <label for="title">Movie Title:</label>
+                <input type="text" id="title">
+                <button id="search">Search</button>
+                
+        
+                <div id="Title"></div>
+                <div id="Year"></div>
+                <div id="Rated"></div>
+                <div id="Release"></div>
+                <div id="Cast"></div>
+                <div id="Plot"></div>
+                <div id="Poster">
+                <img src="#" id="Movieposter"/> 
+                </div>
+            </div>
+            <div data-role="footer">
+                <h3>Developed By Husain</h3>
+            </div>
+        </div>
+        <script>
+            var xmlhttp;
+            
+            document.getElementById('search').addEventListener('click',searchMovie);
+            
+            function searchMovie(e){
+                
+                var title = document.getElementById('title').value;
+                
+                // API url
+                var url = "http://www.omdbapi.com/?apikey=aaf0779a&t=";
+                url += title;
+                url += "&plot=full";
+                //alert(url); - test success
+                
+                //XMLHttp Request
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = getData;
+                xmlhttp.open("get",url,true);
+                xmlhttp.send();
+                
+                }
+            
+            function getData(){
+                
+                //console.log(xmlhttp.readyState); - test success
+                if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                    {
+                        var response = JSON.parse(xmlhttp.responseText);
+                       // console.log(response); - test success
+                        
+                        var title = response.Title;
+                       // console.log(Title); - test success
+                        
+                        var year = response.Year;
+                        var rated = response.Rated;
+                        var release = response.Released;
+                        var cast = response.Actors;
+                        var plot = response.Plot;
+                        var posterurl = response.Poster;
+                        
+                        document.getElementById('Title').innerHTML = "<h1>" + title + "</h1>";
+                        document.getElementById('Year').innerHTML = "<p>" + year + "</p>";
+                        document.getElementById('Rated').innerHTML = "<p>" + rated + "</p>";
+                        document.getElementById('Release').innerHTML = "<p>" + release + "</p>";
+                        document.getElementById('Cast').innerHTML = "<p>" + cast + "</p>";
+                        document.getElementById('Plot').innerHTML = "<p>" + plot + ".</p>";
+                        document.getElementById('Movieposter').src = posterurl;
+                    }
+            }
+        </script>
+        
+    </body>
+</html>
